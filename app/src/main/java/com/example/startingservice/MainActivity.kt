@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var buttonStartCountdown: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
 
         editTextCountdown = findViewById(R.id.editTextCountdown)
         buttonStartCountdown = findViewById(R.id.buttonStartCountdown)
@@ -26,10 +28,20 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show()
             }
         }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
 
+        }
+    }
+
+    private fun startCountdownService(countdownValue: Int) {
+        val intent = Intent(this, CountdownService::class.java).apply {
+            putExtra("COUNTDOWN_VALUE", countdownValue)
+        }
+        startService(intent)
     }
 }
-private fun startCountdownService(countdownValue: Int) {
 
-}
 
